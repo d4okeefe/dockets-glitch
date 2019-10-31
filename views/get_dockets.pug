@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+block content
+  div.container
+    h1
+      | Capture Dockets
+  div.container
+    form#capture_docket_form(method='post' action='/get_dockets')
+      div
+        label(for='docket_num') Enter docket number:
+        input#docket_num(name='docket' type='text' maxlength='100' placeholder='19-100')
+      div
+        button#submit-docket(type='submit' disabled='') Submit Docket    
