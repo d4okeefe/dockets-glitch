@@ -70,9 +70,11 @@ block content
                 ul
                   li
                     p.contactlist= c.attorney_full_name
+                    if c.is_counsel_of_record
+                      p Counsel of Record
                     p.contactlist= c.attorney_office
                     p.contactlist= c.attorney_street_address
-                    p.contactlist= c.attorney_email
+                    p.contactlist= c.attorney_city_state_zip
                     p.contactlist= c.attorney_email
                     p.contactlist= c.party_header
             td.td-sm.latest_proceeding(style="display:none")
