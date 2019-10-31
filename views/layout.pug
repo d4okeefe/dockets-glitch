@@ -1,0 +1,32 @@
+doctype html
+head
+  title Capture Docket
+  meta(name='description' content='Capture single Scotus Docket')
+
+  link#favicon(rel='icon' href='https://glitch.com/edit/favicon-app.ico' type='image/x-icon')
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+
+  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
+  link(rel='stylesheet' href='/style.css')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+  script(src='/index.js' defer='')
+  
+  script // converts date to string
+    -function prettyDate(dateString){
+      -if(dateString === null) return "";
+      -var date = new Date(dateString);
+      -var d = date.getDate();
+      -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+      -var m = monthNames[date.getMonth()];
+      -var y = date.getFullYear();
+      -return m+' '+d+' '+y;
+    -}
+body
+  nav.navbar.navbar-expand-lg.navbar-light.bg-light
+    a.navbar-brand(href='/') Home
+    a.navbar-brand(href='/get_dockets') Collect
+
+  block content
+  

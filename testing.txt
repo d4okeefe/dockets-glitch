@@ -1,0 +1,30 @@
+
+      <!--h5
+          | Show / Hide Columns in Table
+        span.btn-group-toggle
+          label.btn.btn-sm.btn-light.active
+            input#toggle_dkt_yr(type="checkbox" checked="" autocomplete="off") 
+            | Docket year
+        span.btn-group-toggle
+          label.btn.btn-sm.btn-light.active
+            input#toggle_date_retrieved(type="checkbox" checked="" autocomplete="off") 
+            | Date retrieved
+        span.btn-group-toggle
+          label.btn.btn-sm.btn-light.active
+            input#toggle_lwr_ct_cs_num(type="checkbox" checked="" autocomplete="off") 
+            | Lower court case number-->
+
+
+
+            if d.proceeding
+              td
+                h1 
+                | Proceedings
+                
+                table.table.table-striped.table-bordered.table-sm(cellspacing="10" width="100%")
+              each p in d.proceeding
+                  tr
+                    td.td-sm
+                    td.td-sm= "Proc " + p.itm_num
+                    td.td-sm(colspan=1)= p.date_string
+                    td.td-sm(colspan=5)= p.text

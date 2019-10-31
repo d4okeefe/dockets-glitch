@@ -1,0 +1,56 @@
+nav a {
+  padding: 3px;
+}
+
+li {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.contactlist {
+  margin: 0px;
+  padding: 0px;
+}
+
+.header-column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+.header-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.proceedings,
+.contacts,
+.dkt_yr,
+.lower_court_decision_date,
+.lower_court_case_number,
+.lower_court,
+.date_retrieved,
+.date_docketed,
+.latest_proceeding{
+  animation-name: column_animation;
+  animation-duration: 2s;
+}
+
+@keyframes column_animation {
+  from {
+    background-color: lightblue;
+  }
+  to {
+    background-color: white;
+  }
+}
+
+.error {
+  border: 2px solid red;
+}
+
+.btn-group-toggle {
+  margin: 3px;
+  padding: 3px;
+}
