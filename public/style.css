@@ -24,6 +24,25 @@ ul {
   clear: both;
 }
 
+#toggle_dkt_yr:hover,
+#toggle_date_retrieved:hover,
+#toggle_date_docketed:hover,
+#toggle_lwr_ct:hover,
+#toggle_lwr_ct_dec_dt:hover,
+#toggle_lwr_ct_cs_num:hover,
+#toggle_latest_proceeding:hover,
+#toggle_proceedings:hover,
+#toggle_contacts:hover {
+  color: blue;
+}
+
+.link_text_column_visible{
+  color:darkgray;
+}
+.link_text_column_hidden{
+  color:lightgray;
+}
+
 .proceedings,
 .contacts,
 .dkt_yr,
@@ -32,7 +51,7 @@ ul {
 .lower_court,
 .date_retrieved,
 .date_docketed,
-.latest_proceeding{
+.latest_proceeding {
   animation-name: column_animation;
   animation-duration: 2s;
 }
