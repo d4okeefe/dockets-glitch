@@ -217,19 +217,19 @@ let getContacts = ($, docket_data) => {
       re = /(.+)Counsel of Record/i;
       if (re.test(temp_contact.name_block)) {
         temp_contact.is_counsel_of_record = true;
-        console.log(temp_contact.is_counsel_of_record);
+        //console.log(temp_contact.is_counsel_of_record);
         temp_contact.attorney_full_name = temp_contact.name_block.match(re)[1];
         temp_contact.attorney_full_name = htt
           .fromString(temp_contact.attorney_full_name)
           .trim();
-        console.log(temp_contact.attorney_full_name);
+        //console.log(temp_contact.attorney_full_name);
       } else {
         temp_contact.is_counsel_of_record = false;
         console.log(temp_contact.is_counsel_of_record);
         temp_contact.attorney_full_name = htt
-          .fromString(temp_contact.attorney_full_name)
+          .fromString(temp_contact.name_block)
           .trim();
-        console.log(temp_contact.attorney_full_name);
+        //console.log(temp_contact.attorney_full_name);
       }
       // get surname
       temp_contact.attorney_surname = temp_contact.attorney_full_name

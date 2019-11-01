@@ -11,8 +11,7 @@ const cheerio = require("cheerio");
 router.get("/", (req, res) => {
   Docket.find(
     //{},
-    { docket_year: { $eq: 18 }, docket_number_short: { $lte: 100 } },
-
+    { docket_year: { $eq: 19 }},//, docket_number_short: { $lte: 100 } },
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     function(error, rows) {
@@ -47,19 +46,15 @@ router.post("/get_dockets", function(req, res) {
   // INITIALIZE LOCAL VARIABLES
   var tempyr = docket_yr + "-";
   var myUrl = "";
-  //var allUrls = [];
-  var allWebpages = [];
   var promises = [];
 
   // get range of docket numbers
-  for (
-    var i = parseInt(docket_nm, 3);
-    //i <= parseInt(docket_nm, 10) + 49;
-    i <= parseInt(docket_nm, 10) + 2;
-    i++
-  ) {
+  var i = 0;
+  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 5; i++) {
+    console.log(i);
     var dkt = tempyr + i.toString(10);
-    //console.log(dkt + " " + typeof(dkt));
+    //console.log(dkt + " " + typeof dkt);
     //console.log(i + ":" + docket_nm);
     promises.push(
       axios.get(
@@ -69,58 +64,58 @@ router.post("/get_dockets", function(req, res) {
   }
 
   axios
-      .all(promises)
-      .then(results => {
-        results.forEach(response => {
-          //console.log(response); // THIS WILL PRINT THE WEBPAGE
-          var update = utilities.parseResponseData(response);
-          if (update !== null) {
-            var query = { case_name: update.case_name };
-            var options = {
-              upsert: true,
-              new: true,
-              setDefaultsOnInsert: true,
-              overwrite: true
-            };
+    .all(promises)
+    .then(results => {
+      results.forEach(response => {
+        //console.log(response); // THIS WILL PRINT THE WEBPAGE
+        var update = utilities.parseResponseData(response);
+        //console.log("UPDATE: " + update);
+        if (update !== null) {
+          var query = { case_name: update.case_name };
+          var options = {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true,
+            overwrite: true
+          };
 
-            Docket.findOneAndUpdate(query, update, options, (error, result) => {
-              if (error) console.log("ERROR: " + error);
-            });
-          }
-        });
-      })
-      .catch(error => {
-        console.log(error);
+          Docket.findOneAndUpdate(query, update, options, (error, result) => {
+            if (error) console.log("ERROR: " + error);
+          });
+        }
       });
-  
-  
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
   // ALTERNATIVE AXIOS
-//   const promisesResolved = promises.map(promise =>
-//     promise.catch(error => ({ error }))
-//   );
+  //   const promisesResolved = promises.map(promise =>
+  //     promise.catch(error => ({ error }))
+  //   );
 
-//   function checkFailed(then) {
-//     return function(responses) {
-//       const someFailed = responses.some(response => response.error);
+  //   function checkFailed(then) {
+  //     return function(responses) {
+  //       const someFailed = responses.some(response => response.error);
 
-//       if (someFailed) {
-//         throw responses;
-//       }
+  //       if (someFailed) {
+  //         throw responses;
+  //       }
 
-//       return then(responses);
-//     };
-//   }
+  //       return then(responses);
+  //     };
+  //   }
 
-//   axios
-//     .all(promisesResolved)
-//     .then(
-//       checkFailed(([]) => {
-//         console.log("SUCCESS");
-//       })
-//     )
-//     .catch(err => {
-//       console.log("FAIL", err);
-//     });
+  //   axios
+  //     .all(promisesResolved)
+  //     .then(
+  //       checkFailed(([]) => {
+  //         console.log("SUCCESS");
+  //       })
+  //     )
+  //     .catch(err => {
+  //       console.log("FAIL", err);
+  //     });
 
   Docket.find(
     {},

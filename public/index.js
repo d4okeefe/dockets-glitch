@@ -18,6 +18,35 @@ function tableCell(tr, index) {
 }
 
 $(document).ready(function() {
+  // datatable processing
+
+  // $("#docket-table").before('<div id="nav"></div>');
+  // var rowsShown = 25;
+  // var rowsTotal = $("#docket-table tbody tr").length;
+  // var numPages = rowsTotal / rowsShown;
+  // for (let i = 0; i < numPages; i++) {
+  //   var pageNum = i + 1;
+  //   $("#nav").append('<a href="#" rel="' + i + '">' + pageNum + "</a> ");
+  // }
+  // $("#docket-table tbody tr").hide();
+  // $("#docket-table tbody tr")
+  //   .slice(0, rowsShown)
+  //   .show();
+  // $("#nav a:first").addClass("active");
+  // $("#nav a").bind("click", function() {
+  //   $("#nav a").removeClass("active");
+  //   $(this).addClass("active");
+  //   var currPage = $(this).attr("rel");
+  //   var startItem = currPage * rowsShown;
+  //   var endItem = startItem + rowsShown;
+  //   $("#docket-table tbody tr")
+  //     .css("opacity", "0.0")
+  //     .hide()
+  //     .slice(startItem, endItem)
+  //     .css("display", "table-row")
+  //     .animate({ opacity: 1 }, 300);
+  // });
+
   // filter results
   $("#search-table").on("keyup", function() {
     var value = $(this)
@@ -32,15 +61,29 @@ $(document).ready(function() {
       );
     });
     $("#num_rows_in_tbl").text(
-      "Number of rows:  " + $("#docket-table tr:visible").length + "  rows"
+      "Number of dockets:  " +
+        ($("#docket-table tr:visible").length - 1) +
+        "  dockets"
     );
   });
 
   $("#num_rows_in_tbl").text(
-    "Number of rows:  " + $("#docket-table tr:visible").length + "  rows"
+    "Number of dockets:  " +
+      ($("#docket-table tr:visible").length - 1) +
+      "  dockets"
   );
-  
+
+  // if ($(".date_docketed_header").css("display") === "none") {
+  //   $("#toggle_date_docketed").addClass("link_text_column_hidden");
+  //   $("#toggle_date_docketed").removeClass("link_text_column_visible");
+  // }
+
   //toggle_date_docketed
+  if ($(".date_docketed_header").css("display") === "none") {
+    $("#toggle_date_docketed").css("color", "lightgray");
+  } else {
+    $("#toggle_date_docketed").css("color", "black");
+  }
   $("#toggle_date_docketed").on("click", function() {
     let $date_docketed_header = $(".date_docketed_header");
     let $date_docketed = $(".date_docketed");
@@ -57,8 +100,13 @@ $(document).ready(function() {
       $("#toggle_date_docketed").css("color", "lightgray");
     }
   });
-  
+
   //toggle_latest_proceeding
+  if ($(".latest_proceeding_header").css("display") === "none") {
+    $("#toggle_latest_proceeding").css("color", "lightgray");
+  } else {
+    $("#toggle_latest_proceeding").css("color", "black");
+  }
   $("#toggle_latest_proceeding").on("click", function() {
     let $latest_proceeding_header = $(".latest_proceeding_header");
     let $latest_proceeding = $(".latest_proceeding");
@@ -75,8 +123,13 @@ $(document).ready(function() {
       $("#toggle_latest_proceeding").css("color", "lightgray");
     }
   });
-  
+
   //toggle_lwr_ct
+  if ($(".lower_court_header").css("display") === "none") {
+    $("#toggle_lwr_ct").css("color", "lightgray");
+  } else {
+    $("#toggle_lwr_ct").css("color", "black");
+  }
   $("#toggle_lwr_ct").on("click", function() {
     let $lower_court_header = $(".lower_court_header");
     let $lower_court = $(".lower_court");
@@ -95,6 +148,11 @@ $(document).ready(function() {
   });
 
   //toggle_lwr_ct_dec_dt
+  if ($(".lower_court_case_number_header").css("display") === "none") {
+    $("#toggle_lwr_ct_dec_dt").css("color", "lightgray");
+  } else {
+    $("#toggle_lwr_ct_dec_dt").css("color", "black");
+  }
   $("#toggle_lwr_ct_dec_dt").on("click", function() {
     let $lower_court_case_number_header = $(".lower_court_case_number_header");
     let $lower_court_case_number = $(".lower_court_case_number");
@@ -114,6 +172,11 @@ $(document).ready(function() {
 
   // display proceedings
   // proceedings header toggle_proceedings
+  if ($(".proceedings_header").css("display") === "none") {
+    $("#toggle_proceedings").css("color", "lightgray");
+  } else {
+    $("#toggle_proceedings").css("color", "black");
+  }
   $("#toggle_proceedings").on("click", function() {
     let $proceedings_header = $(".proceedings_header");
     let $proceedings = $(".proceedings");
@@ -124,8 +187,6 @@ $(document).ready(function() {
       $proceedings_header.css("display", "table-cell");
       $proceedings.css("display", "table-cell");
       $("#toggle_proceedings").css("color", "black");
-      //.addClass("btn-light");
-      //$lower_court_case_number.css("background-color", "blue");
     } else {
       $proceedings_header.css("display", "none");
       $proceedings.css("display", "none");
@@ -135,6 +196,11 @@ $(document).ready(function() {
 
   // display columns
   // contacts header toggle_contacts
+  if ($(".contacts_header").css("display") === "none") {
+    $("#toggle_contacts").css("color", "lightgray");
+  } else {
+    $("#toggle_contacts").css("color", "black");
+  }
   $("#toggle_contacts").on("click", function() {
     let $contacts_header = $(".contacts_header");
     let $contacts = $(".contacts");
@@ -153,6 +219,11 @@ $(document).ready(function() {
   });
 
   // date_retrieved_header
+  if ($(".date_retrieved_header").css("display") === "none") {
+    $("#toggle_date_retrieved").css("color", "lightgray");
+  } else {
+    $("#toggle_date_retrieved").css("color", "black");
+  }
   $("#toggle_date_retrieved").on("click", function() {
     let $date_retrieved_header = $(".date_retrieved_header");
     let $date_retrieved = $(".date_retrieved");
@@ -170,6 +241,11 @@ $(document).ready(function() {
     }
   });
 
+  if ($(".lower_court_case_number_header").css("display") === "none") {
+    $("#toggle_lwr_ct_cs_num").css("color", "lightgray");
+  } else {
+    $("#toggle_lwr_ct_cs_num").css("color", "black");
+  }
   $("#toggle_lwr_ct_cs_num").on("click", function() {
     let $lower_court_case_number_header = $(".lower_court_case_number_header");
     let $lower_court_case_number = $(".lower_court_case_number");
@@ -187,6 +263,11 @@ $(document).ready(function() {
     }
   });
 
+  if ($(".dkt_yr_header").css("display") === "none") {
+    $("#toggle_dkt_yr").css("color", "lightgray");
+  } else {
+    $("#toggle_dkt_yr").css("color", "black");
+  }
   $("#toggle_dkt_yr").on("click", function() {
     let $dkt_yr_header = $(".dkt_yr");
     let $dk_yr = $(".dkt_yr_header");
