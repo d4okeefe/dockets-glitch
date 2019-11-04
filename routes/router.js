@@ -7,11 +7,56 @@ const utilities = require("../utils/utils");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
+//save to redis ???
+
 // SET ROUTES
+router.get("/19", (req, res) => {
+  Docket.find(
+    {
+      'docket_year': '19'
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      res.render("index", { docket_list: rows });
+    }
+  );
+});
+
+router.get("/petitions_denied", (req, res) => {
+  Docket.find(
+    {
+      'proceeding.text': {
+        $regex:  /Petition DENIED/i 
+      }
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      res.render("index", { docket_list: rows });
+    }
+  );
+});
+
+router.get("/petitions_granted", (req, res) => {
+  Docket.find(
+    {
+      'proceeding.text': {
+        $regex:  /Petition GRANTED/i 
+      }
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      res.render("index", { docket_list: rows });
+    }
+  );
+});
+
 router.get("/", (req, res) => {
   Docket.find(
-    //{},
-    { docket_year: { $eq: 19 }},//, docket_number_short: { $lte: 100 } },
+    {},
+    //{ docket_year: { $eq: 19 }, docket_number_short: { $lte: 100 } },
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     function(error, rows) {
@@ -50,8 +95,8 @@ router.post("/get_dockets", function(req, res) {
 
   // get range of docket numbers
   var i = 0;
-  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
-  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 5; i++) {
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 5; i++) {
     console.log(i);
     var dkt = tempyr + i.toString(10);
     //console.log(dkt + " " + typeof dkt);

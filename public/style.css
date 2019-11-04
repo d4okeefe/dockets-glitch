@@ -1,3 +1,8 @@
+.lower_court_decision_dates p {
+  padding: 0px;
+  margin: 0px;
+}
+
 nav a {
   padding: 3px;
 }
@@ -36,11 +41,11 @@ ul {
   color: blue;
 }
 
-.link_text_column_visible{
-  color:darkgray;
+.link_text_column_visible {
+  color: darkgray;
 }
-.link_text_column_hidden{
-  color:lightgray;
+.link_text_column_hidden {
+  color: lightgray;
 }
 
 .proceedings,
