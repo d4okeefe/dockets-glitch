@@ -10,6 +10,45 @@ const cheerio = require("cheerio");
 //save to redis ???
 
 // SET ROUTES
+router.get("/", (req, res) => {
+  Docket.find(
+    {
+      "proceeding.text": {
+        $nin: /((Petition (DENIED|Dismissed))|(JUD?GMENT ISSUED)|(petition for a writ of certiorari is dismissed)|(petition for a writ of mandamus is dismissed))/i
+      }
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      //console.log(rows);
+      //res.send(JSON.stringify(rows));
+      res.render("index", {
+        docket_list: rows,
+        search_type: "ACTIVE CASES"
+      });
+    }
+  );
+});
+router.get("/active_cases", (req, res) => {
+  Docket.find(
+    {
+      "proceeding.text": {
+        $nin: /((Petition (DENIED|Dismissed))|(JUD?GMENT ISSUED)|(petition for a writ of certiorari is dismissed)|(petition for a writ of mandamus is dismissed))/i
+      }
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      //console.log(rows);
+      //res.send(JSON.stringify(rows));
+      res.render("index", {
+        docket_list: rows,
+        search_type: "ACTIVE CASES"
+      });
+    }
+  );
+});
+
 router.get("/amicus_curiae", (req, res) => {
   Docket.find(
     {
@@ -20,13 +59,16 @@ router.get("/amicus_curiae", (req, res) => {
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     function(error, rows) {
-      res.render("index", { docket_list: rows });
+      res.render("index", {
+        docket_list: rows,
+        search_type: "AMICUS CURIAE CASES (cases where >= 1 amicus has filed)"
+      });
     }
   );
 });
 
 router.get("/year/:yr", (req, res) => {
-  console.log("PARAMS: " + req.params.yr);
+  //console.log("PARAMS: " + req.params.yr);
   let yr = parseInt(req.params.yr, 10);
   //console.log("after_parseInt" + yr);
 
@@ -35,8 +77,11 @@ router.get("/year/:yr", (req, res) => {
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     (err, rows) => {
-      console.log(rows);
-      res.render("index", { docket_list: rows });
+      //console.log(rows);
+      res.render("index", {
+        docket_list: rows,
+        search_type: "CASES FROM DOCKET YEAR " + yr
+      });
     }
   );
 });
@@ -51,7 +96,10 @@ router.get("/petitions_denied", (req, res) => {
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     function(error, rows) {
-      res.render("index", { docket_list: rows });
+      res.render("index", {
+        docket_list: rows,
+        search_type: "CASES DENIED CERT"
+      });
     }
   );
 });
@@ -66,12 +114,15 @@ router.get("/petitions_granted", (req, res) => {
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
     function(error, rows) {
-      res.render("index", { docket_list: rows });
+      res.render("index", {
+        docket_list: rows,
+        search_type: "CASES GRANTED CERT"
+      });
     }
   );
 });
 
-router.get("/", (req, res) => {
+router.get("/all_cases", (req, res) => {
   Docket.find(
     {},
     //{ docket_year: { $eq: 19 }, docket_number_short: { $lte: 100 } },
@@ -80,13 +131,14 @@ router.get("/", (req, res) => {
     function(error, rows) {
       //console.log(rows);
       //res.send(JSON.stringify(rows));
-      res.render("index", { docket_list: rows });
+      res.render("index", {
+        docket_list: rows,
+        search_type: "ALL CASES COLLECTED"
+      });
     }
   );
 });
-router.get("/get_dockets", (req, res) => {
-  res.render("get_dockets");
-});
+
 router.get("/dockets", (req, res) => {
   Docket.find(
     {},
@@ -98,7 +150,68 @@ router.get("/dockets", (req, res) => {
     }
   );
 });
-router.post("/get_dockets", function(req, res) {
+
+async function axios_request(get) {
+  console.log(get.docket + ": " + get.url);
+  var temp_dkt = get.docket;
+  try {
+    const response = await axios.get(get.url);
+    console.log("SUCCESS!!!   " + temp_dkt);
+
+    var update = utilities.parseResponseData(response);
+    //console.log("UPDATE: " + update);
+    if (update !== null) {
+      var query = { case_name: update.case_name };
+      var options = {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+        overwrite: true
+      };
+
+      Docket.findOneAndUpdate(query, update, options, (error, result) => {
+        if (error) console.log("MONGODB ERROR: " + error);
+      });
+    }
+
+    //return response;
+  } catch (error) {
+    // Error
+    if (error.response) {
+      /*
+       * The request was made and the server responded with a
+       * status code that falls out of the range of 2xx
+       */
+      //console.log(error.response.data);
+      //console.log(error.response.status);
+      //console.log(error.response.headers)
+      console.log(
+        "ERROR: " + temp_dkt + " ERROR: RESPONSE STATUS OUTSIDE OF 2XX!!!"
+      );
+    } else if (error.request) {
+      /*
+       * The request was made but no response was received, `error.request`
+       * is an instance of XMLHttpRequest in the browser and an instance
+       * of http.ClientRequest in Node.js
+       */
+      //console.log(error.request);
+      //console.log("ERROR: " + temp_dkt + " ERROR: NO RESPONSE RECEIVED!!!");
+      console.log("ERROR ON " + get.dkt + "--RETRYING!!!");
+      // try to loop back through ???
+      axios_request(get);
+    } else {
+      // Something happened in setting up the request and triggered an Error
+      //console.log("Error", error.message);
+      console.log("ERROR: " + temp_dkt + " ERROR: REQUEST SETUP ERROR!!!");
+    }
+    //console.log(error);
+    return "ERROR";
+  }
+}
+router.get("/get_dockets", (req, res) => {
+  res.render("get_dockets");
+});
+router.post("/get_dockets", (req, res, next) => {
   console.log("app.post running");
   var docket_user = req.body.docket;
   var docket_split = docket_user.split("-");
@@ -109,88 +222,27 @@ router.post("/get_dockets", function(req, res) {
   // INITIALIZE LOCAL VARIABLES
   var tempyr = docket_yr + "-";
   var myUrl = "";
-  var promises = [];
+  var gets = [];
 
   // get range of docket numbers
   var i = 0;
-  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
-    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 5; i++) {
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 99; i++) {
+    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
     console.log(i);
-    var dkt = tempyr + i.toString(10);
-    //console.log(dkt + " " + typeof dkt);
-    //console.log(i + ":" + docket_nm);
-    promises.push(
-      axios.get(
-        `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
-      )
-    );
-  }
+    var dkt = tempyr + i.toString();
+    console.log(dkt);
 
-  axios
-    .all(promises)
-    .then(results => {
-      results.forEach(response => {
-        //console.log(response); // THIS WILL PRINT THE WEBPAGE
-        var update = utilities.parseResponseData(response);
-        //console.log("UPDATE: " + update);
-        if (update !== null) {
-          var query = { case_name: update.case_name };
-          var options = {
-            upsert: true,
-            new: true,
-            setDefaultsOnInsert: true,
-            overwrite: true
-          };
-
-          Docket.findOneAndUpdate(query, update, options, (error, result) => {
-            if (error) console.log("ERROR: " + error);
-          });
-        }
-      });
-    })
-    .catch(error => {
-      console.log(error);
+    gets.push({
+      docket: dkt,
+      url: `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
     });
-
-  // ALTERNATIVE AXIOS
-  //   const promisesResolved = promises.map(promise =>
-  //     promise.catch(error => ({ error }))
-  //   );
-
-  //   function checkFailed(then) {
-  //     return function(responses) {
-  //       const someFailed = responses.some(response => response.error);
-
-  //       if (someFailed) {
-  //         throw responses;
-  //       }
-
-  //       return then(responses);
-  //     };
-  //   }
-
-  //   axios
-  //     .all(promisesResolved)
-  //     .then(
-  //       checkFailed(([]) => {
-  //         console.log("SUCCESS");
-  //       })
-  //     )
-  //     .catch(err => {
-  //       console.log("FAIL", err);
-  //     });
-
-  Docket.find(
-    {},
-    //{ docket_year: { $eq: 19 }, docket_number_short: { $lte: 100 } },
-
-    null,
-    { sort: { docket_year: 1, docket_number_short: 1 } },
-    function(error, rows) {
-      //console.log(rows);
-      res.render("index", { docket_list: rows });
-    }
-  );
+  }
+  for (i = 0; i < gets.length; i++) {
+    // IS THIS LIKE A HANDOFF OF THREADS ???
+    axios_request(gets[i]);
+  }
+  
+  res.redirect('/');
 });
 
 module.exports = router;

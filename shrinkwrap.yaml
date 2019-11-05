@@ -5,7 +5,7 @@ dependencies:
   express: 4.17.1
   html-to-text: 5.1.1
   jquery: 3.4.1
-  mongoose: 5.7.7
+  mongoose: 5.7.8
   pug: 2.0.4
   pug-cli: 0.0.0
 packages:
@@ -797,7 +797,7 @@ packages:
       mongoose: '*'
     resolution:
       integrity: sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
-  /mongoose/5.7.7:
+  /mongoose/5.7.8:
     dependencies:
       bson: 1.1.1
       kareem: 2.3.1
@@ -814,7 +814,7 @@ packages:
     engines:
       node: '>=4.0.0'
     resolution:
-      integrity: sha512-FU59waB4LKBa9KOnqBUcCcMIVRc09TFo1F8nMxrzSiIWATaJpjxxSSH5FBVUDxQfNdJLfg9uFHxaTxhhwjsZOQ==
+      integrity: sha512-GsFXYo7z3ebnIDdnqlDJYQXQFqEGS+yxfdY9G0B7fxpvUJchDpwLGuGJdVd1QbGxu2l0DscCYBO0ntl3G6OACA==
   /mpath/0.6.0:
     dev: false
     engines:
@@ -1402,6 +1402,6 @@ specifiers:
   express: ^4.16.4
   html-to-text: ^5.1.1
   jquery: ^3.4.1
-  mongoose: ^5.7.7
+  mongoose: ^5.7.8
   pug: ^2.0.4
   pug-cli: ^0.0.0
