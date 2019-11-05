@@ -12,18 +12,19 @@ block content
         br
         br
       div
-        form#petiton-granted(method="get" action="/amicus_curiae")
-          input(type="submit" value="Cases with Amicus curiae")
-        form#petiton-granted(method="get" action="/petitions_granted")
-          input(type="submit" value="Petitions granted")
-        form#petiton-denied(method="get" action="/petitions_denied")
-          input(type="submit" value="Petitions denied")
-        form#year_collection(method="get" action="/year/17")
-          input(type="submit" value="Docket year 17")
-        form#year_collection(method="get" action="/year/18")
-          input(type="submit" value="Docket year 18")
-        form#year_collection(method="get" action="/year/19")
-          input(type="submit" value="Docket year 19")
+        nav.navbar.navbar-expand-lg.navbar-light.bg-light
+          form#petiton-granted(method="get" action="/amicus_curiae")
+            input(type="submit" value="Cases with Amicus curiae")
+          form#petiton-granted(method="get" action="/petitions_granted")
+            input(type="submit" value="Petitions granted")
+          form#petiton-denied(method="get" action="/petitions_denied")
+            input(type="submit" value="Petitions denied")
+          form#year_collection(method="get" action="/year/17")
+            input(type="submit" value="Docket year 17")
+          form#year_collection(method="get" action="/year/18")
+            input(type="submit" value="Docket year 18")
+          form#year_collection(method="get" action="/year/19")
+            input(type="submit" value="Docket year 19")
         br
         br
       div
