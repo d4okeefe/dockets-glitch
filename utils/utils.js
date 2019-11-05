@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 const htt = require("html-to-text");
 
 exports.parseResponseData = response => {
-  console.log("INITIATING PARSE");
+  //console.log("INITIATING PARSE");
 
   var docket_data = {};
   docket_data.proceeding = [];
@@ -140,7 +140,7 @@ let getProceedings = ($, docket_data) => {
                   .text()
                   .trim();
               } else {
-                console.log("Error: third column found!");
+                //console.log("Error: third column found!");
               }
             } /*(i % 2 !== 1)*/ else {
               // & make sure correct class name !!!
@@ -189,7 +189,7 @@ let getContacts = ($, docket_data) => {
   var contact_number = 0;
   var contact_list = [];
   var temp_contact = {};
-  console.log("COLLECTING CONTACT");
+  //console.log("COLLECTING CONTACT");
   var $cells = $("#Contacts").find("td");
   var curr_atty_group = "";
   var re = "";
@@ -218,7 +218,7 @@ let getContacts = ($, docket_data) => {
 
       // get name info
       temp_contact.name_block = $(c).text();
-      console.log(temp_contact.name_block);
+      //console.log(temp_contact.name_block);
 
       re = /(.+)Counsel of Record/i;
       if (re.test(temp_contact.name_block)) {
@@ -231,7 +231,7 @@ let getContacts = ($, docket_data) => {
         //console.log(temp_contact.attorney_full_name);
       } else {
         temp_contact.is_counsel_of_record = false;
-        console.log(temp_contact.is_counsel_of_record);
+        //console.log(temp_contact.is_counsel_of_record);
         temp_contact.attorney_full_name = htt
           .fromString(temp_contact.name_block)
           .trim();
@@ -248,12 +248,12 @@ let getContacts = ($, docket_data) => {
       var cnext_split = $(cnext)
         .html()
         .split("<br>");
-      console.log("cnext_split: " + cnext_split);
-      console.log("cnext_split.length: " + cnext_split.length);
+      //console.log("cnext_split: " + cnext_split);
+      //console.log("cnext_split.length: " + cnext_split.length);
       var cnext2 = [];
       for (var i = 0; i < cnext_split.length; i++) {
         var cnext_itm_temp = htt.fromString(cnext_split[i]).trim();
-        console.log("cnext_itm_temp: " + cnext_itm_temp);
+        //console.log("cnext_itm_temp: " + cnext_itm_temp);
         if (cnext_itm_temp != "") {
           cnext2.push(cnext_itm_temp);
         }

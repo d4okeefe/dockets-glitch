@@ -15,7 +15,7 @@
     "cheerio": "^0.22.0",
     "jquery": "^3.4.1",
     "pug-cli": "^0.0.0",
-    "mongoose": "^5.7.7",
+    "mongoose": "^5.7.8",
     "pug": "^2.0.4",
     "async": "^3.1.0",
     "html-to-text": "^5.1.1"

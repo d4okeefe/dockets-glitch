@@ -13,8 +13,12 @@ block content
         br
       div
         nav.navbar.navbar-expand-lg.navbar-light.bg-light
+          form#petiton-granted(method="get" action="/active_cases")
+            input(type="submit" value="Active cases")        
+          form#petiton-granted(method="get" action="/all_cases")
+            input(type="submit" value="All cases")
           form#petiton-granted(method="get" action="/amicus_curiae")
-            input(type="submit" value="Cases with Amicus curiae")
+            input(type="submit" value="Cases with amicus curiae")
           form#petiton-granted(method="get" action="/petitions_granted")
             input(type="submit" value="Petitions granted")
           form#petiton-denied(method="get" action="/petitions_denied")
@@ -27,6 +31,8 @@ block content
             input(type="submit" value="Docket year 19")
         br
         br
+      div
+        h4= search_type
       div
         h6#num_rows_in_tbl
       div
