@@ -31,17 +31,17 @@ var DocketSchema = new Schema({
   date_docketed_string: { type: String },
   lower_court: { type: String },
   lower_court_case_number: { type: String },
-  date_rehearing_denied_string: { type: String },
-  date_discretionary_court_decision_string: { type: String },
-  decision_date_string: { type: String },
+  lower_court_case_decision_date_string: { type: String },
+  lower_court_case_rehearing_denied_date_string: { type: String },
+  lower_court_discretionary_court_decision__date_string: { type: String },
 
   // TABLE 1 DERIVED PROPERTIES
   docket_year: { type: Number },
   docket_number_short: { type: Number },
   date_docketed: { type: Date },
-  date_rehearing_denied: { type: Date },
-  date_discretionary_court_decision: { type: Date },
-  decision_date: { type: Date },
+  lower_court_case_decision_date: { type: Date },
+  lower_court_case_rehearing_denied_date: { type: Date },
+  lower_court_discretionary_court_decision__date: { type: Date },
 
   // FOREIGN MODELS
   //author: { type: Schema.ObjectId, ref: 'Author', required: true },

@@ -15,7 +15,7 @@ app.use("/", router);
 // // MONGOOSE DB
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
-var mongoDB = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0-jdy6d.gcp.mongodb.net/dockets?retryWrites=true&w=majority`;
+var mongoDB = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0-jdy6d.gcp.mongodb.net/dockets2?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));

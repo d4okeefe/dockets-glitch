@@ -148,24 +148,24 @@ $(document).ready(function() {
   });
 
   //toggle_lwr_ct_dec_dt
-  if ($(".lower_court_case_number_header").css("display") === "none") {
+  if ($(".lower_court_decision_dates_header").css("display") === "none") {
     $("#toggle_lwr_ct_dec_dt").css("color", "lightgray");
   } else {
     $("#toggle_lwr_ct_dec_dt").css("color", "black");
   }
   $("#toggle_lwr_ct_dec_dt").on("click", function() {
-    let $lower_court_case_number_header = $(".lower_court_case_number_header");
-    let $lower_court_case_number = $(".lower_court_case_number");
+    let $lower_court_decision_dates_header = $(".lower_court_decision_dates_header");
+    let $lower_court_decision_dates = $(".lower_court_decision_dates");
     if (
-      $lower_court_case_number_header.css("display") === "none" &&
-      $lower_court_case_number.css("display") === "none"
+      $lower_court_decision_dates_header.css("display") === "none" &&
+      $lower_court_decision_dates.css("display") === "none"
     ) {
-      $lower_court_case_number_header.css("display", "table-cell");
-      $lower_court_case_number.css("display", "table-cell");
+      $lower_court_decision_dates_header.css("display", "table-cell");
+      $lower_court_decision_dates.css("display", "table-cell");
       $("#toggle_lwr_ct_dec_dt").css("color", "black");
     } else {
-      $lower_court_case_number_header.css("display", "none");
-      $lower_court_case_number.css("display", "none");
+      $lower_court_decision_dates_header.css("display", "none");
+      $lower_court_decision_dates.css("display", "none");
       $("#toggle_lwr_ct_dec_dt").css("color", "lightgray");
     }
   });

@@ -40,8 +40,10 @@ exports.parseResponseData = response => {
   docket_data.case_name = $(".title")
     .text()
     .trim();
-  docket_data.date_docketed_string = $("td:contains(Docketed:)")
-    .next()
+  //docket_data.date_docketed_string = $("td:contains(Docketed:)")
+  docket_data.date_docketed_string = $(
+    "#docketinfo tr:nth-child(3) td:nth-child(2)"
+  )
     .text()
     .trim();
   docket_data.date_docketed =
@@ -49,47 +51,51 @@ exports.parseResponseData = response => {
     docket_data.date_docketed_string === null
       ? null
       : new Date(docket_data.date_docketed_string);
-  docket_data.lower_court = $("td:contains(Lower Ct:)")
-    .next()
-    .text()
-    .trim();
-  docket_data.lower_court_case_number = $("td:contains(Case Numbers:)")
-    .next()
-    .text()
-    .trim();
-  docket_data.date_rehearing_denied_string = $("td:contains(Rehearing Denied:)")
-    .next()
-    .text()
-    .trim();
-  docket_data.date_rehearing_denied =
-    docket_data.date_rehearing_denied_string === "" ||
-    docket_data.date_rehearing_denied_string === null
-      ? null
-      : new Date(docket_data.date_rehearing_denied_string);
-  docket_data.date_discretionary_court_decision_string = $(
-    "td:contains(Discretionary Court Decision Date:)"
+  //docket_data.lower_court = $("td:contains(Lower Ct:)")
+  docket_data.lower_court = $(
+    "#docketinfo tr:nth-child(5) td:nth-child(2)"
   )
-    .next()
     .text()
     .trim();
-
-  docket_data.date_discretionary_court_decision =
-    docket_data.date_discretionary_court_decision_string === "" ||
-    docket_data.date_discretionary_court_decision_string === null
-      ? null
-      : new Date(docket_data.date_discretionary_court_decision_string);
-  docket_data.decision_date_string = $(
-    "td:contains(Discretionary Court Decision Date:)"
+  //docket_data.lower_court_case_number = $("td:contains(Case Numbers:)")
+  docket_data.lower_court_case_number = $(
+    "#docketinfo tr:nth-child(6) td:nth-child(2)"
   )
-    .next()
     .text()
     .trim();
-
-  docket_data.decision_date =
-    docket_data.decision_date_string === "" ||
-    docket_data.decision_date_string === null
+  //docket_data.lower_court_case_decision_date_string = $("td:contains(Decision Date:)")
+  docket_data.lower_court_case_decision_date_string = $(
+    "#docketinfo tr:nth-child(7) td:nth-child(2)"
+  )
+    .text()
+    .trim();
+  docket_data.lower_court_case_decision_date =
+    docket_data.lower_court_case_decision_date_string === "" ||
+    docket_data.lower_court_case_decision_date_string === null
       ? null
-      : new Date(docket_data.decision_date_string);
+      : new Date(docket_data.lower_court_case_decision_date_string);
+  //docket_data.lower_court_case_rehearing_denied_date_string = $("td:contains(Rehearing Denied:)")
+  docket_data.lower_court_case_rehearing_denied_date_string = $(
+    "#docketinfo tr:nth-child(8) td:nth-child(2)"
+  )
+    .text()
+    .trim();
+  docket_data.lower_court_case_rehearing_denied_date =
+    docket_data.lower_court_case_rehearing_denied_date_string === "" ||
+    docket_data.lower_court_case_rehearing_denied_date_string === null
+      ? null
+      : new Date(docket_data.lower_court_case_rehearing_denied_date_string);
+  //docket_data.lower_court_discretionary_court_decision__date_string = $("td:contains(Discretionary Court Decision Date:)")
+   docket_data.lower_court_discretionary_court_decision__date_string = $("#docketinfo > tbody > tr:nth-child(9) > td:nth-child(2)")
+  
+
+    .text()
+    .trim();
+  docket_data.lower_court_discretionary_court_decision__date =
+    docket_data.lower_court_discretionary_court_decision__date_string === "" ||
+    docket_data.lower_court_discretionary_court_decision__date_string === null
+      ? null
+      : new Date(docket_data.lower_court_discretionary_court_decision__date);
 
   docket_data = getProceedings($, docket_data);
 

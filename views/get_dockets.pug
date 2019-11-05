@@ -10,6 +10,6 @@ block content
     form#capture_docket_form(method='post' action='/get_dockets')
       div
         label(for='docket_num') Enter docket number:
-        input#docket_num(name='docket' type='text' maxlength='100' placeholder='19-100')
+        input#docket_num(name='docket' type='text' maxlength='100' placeholder='19-100' autofocus='')
       div
         button#submit-docket(type='submit' disabled='') Submit Docket    
