@@ -10,10 +10,12 @@ const cheerio = require("cheerio");
 //save to redis ???
 
 // SET ROUTES
-router.get("/19", (req, res) => {
+router.get("/amicus_curiae", (req, res) => {
   Docket.find(
     {
-      'docket_year': '19'
+      "proceeding.text": {
+        $regex: /amic(i|us) curiae/i
+      }
     },
     null,
     { sort: { docket_year: 1, docket_number_short: 1 } },
@@ -23,11 +25,27 @@ router.get("/19", (req, res) => {
   );
 });
 
+router.get("/year/:yr", (req, res) => {
+  console.log("PARAMS: " + req.params.yr);
+  let yr = parseInt(req.params.yr, 10);
+  //console.log("after_parseInt" + yr);
+
+  Docket.find(
+    { docket_year: yr },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    (err, rows) => {
+      console.log(rows);
+      res.render("index", { docket_list: rows });
+    }
+  );
+});
+
 router.get("/petitions_denied", (req, res) => {
   Docket.find(
     {
-      'proceeding.text': {
-        $regex:  /Petition DENIED/i 
+      "proceeding.text": {
+        $regex: /Petition DENIED/i
       }
     },
     null,
@@ -41,8 +59,8 @@ router.get("/petitions_denied", (req, res) => {
 router.get("/petitions_granted", (req, res) => {
   Docket.find(
     {
-      'proceeding.text': {
-        $regex:  /Petition GRANTED/i 
+      "proceeding.text": {
+        $regex: /Petition GRANTED/i
       }
     },
     null,

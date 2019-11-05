@@ -12,12 +12,18 @@ block content
         br
         br
       div
+        form#petiton-granted(method="get" action="/amicus_curiae")
+          input(type="submit" value="Cases with Amicus curiae")
         form#petiton-granted(method="get" action="/petitions_granted")
-          input(style="-webkit-appearance:none" style="appearance:none" type="submit" value="Petitions granted")
+          input(type="submit" value="Petitions granted")
         form#petiton-denied(method="get" action="/petitions_denied")
           input(type="submit" value="Petitions denied")
-        form#year19(method="get" action="/19")
-          input(type="submit" value="19-")
+        form#year_collection(method="get" action="/year/17")
+          input(type="submit" value="Docket year 17")
+        form#year_collection(method="get" action="/year/18")
+          input(type="submit" value="Docket year 18")
+        form#year_collection(method="get" action="/year/19")
+          input(type="submit" value="Docket year 19")
         br
         br
       div
@@ -54,66 +60,67 @@ block content
           th.th-sm.proceedings_header(style="display:none") Proceedings
           th.th-sm.contacts_header(style="display:none") Contacts
       tbody
-        each d in docket_list
-          tr#docket-rows
-            td.td-sm.dkt_yr(style="display:none")= d.docket_year
-            td.td-sm.dkt_shrt(style="display:none")= d.docket_number_short
-            //td.td-sm.date_retrieved(style="display:none")= prettyDate(d.date_retrieved)
-            td.td-sm.docket_number
-              span
-                a(href=d.web_address target="_blank")
-                  p= d.docket_number
-            td.td-sm.case_name= d.case_name
-            td.td-sm.date_docketed(style="display:none")= d.date_docketed_string
-            td.td-sm.lower_court(style="display:none")= d.lower_court
-            td.td-sm.lower_court_case_number(style="display:none")= d.lower_court_case_number
-            td.td-sm.lower_court_decision_dates(style="display:none")
-              div
-              if d.lower_court_case_decision_date_string != ""
-                p(style="font-style:italic") Decision:
-                p= d.lower_court_case_decision_date_string
-              if d.lower_court_case_rehearing_denied_date_string != ""
-                p(style="font-style:italic") Rehearing denied:
-                p= d.lower_court_case_rehearing_denied_date_string
-              if d.lower_court_discretionary_court_decision__date_string != ""
-                p(style="font-style:italic") Discretionary date:
-                p= d.lower_court_discretionary_court_decision__date_string
-            td.td-sm.latest_proceeding
-              div
-                span= d.proceeding[d.proceeding.length - 1].date_string
-                br
-                span= d.proceeding[d.proceeding.length - 1].text
-                each lnk in d.proceeding[d.proceeding.length - 1].links
+        if docket_list != null
+          each d in docket_list
+            tr#docket-rows
+              td.td-sm.dkt_yr(style="display:none")= d.docket_year
+              td.td-sm.dkt_shrt(style="display:none")= d.docket_number_short
+              //td.td-sm.date_retrieved(style="display:none")= prettyDate(d.date_retrieved)
+              td.td-sm.docket_number
+                span
+                  a(href=d.web_address target="_blank")
+                    p= d.docket_number
+              td.td-sm.case_name= d.case_name
+              td.td-sm.date_docketed(style="display:none")= d.date_docketed_string
+              td.td-sm.lower_court(style="display:none")= d.lower_court
+              td.td-sm.lower_court_case_number(style="display:none")= d.lower_court_case_number
+              td.td-sm.lower_court_decision_dates(style="display:none")
+                div
+                if d.lower_court_case_decision_date_string != ""
+                  p(style="font-style:italic") Decision:
+                  p= d.lower_court_case_decision_date_string
+                if d.lower_court_case_rehearing_denied_date_string != ""
+                  p(style="font-style:italic") Rehearing denied:
+                  p= d.lower_court_case_rehearing_denied_date_string
+                if d.lower_court_discretionary_court_decision__date_string != ""
+                  p(style="font-style:italic") Discretionary date:
+                  p= d.lower_court_discretionary_court_decision__date_string
+              td.td-sm.latest_proceeding
+                div
+                  span= d.proceeding[d.proceeding.length - 1].date_string
                   br
-                  span
-                    a(href=lnk.url target="_blank")= lnk.title
-            td.td-sm.proceedings(style="display:none")
-              each p in d.proceeding
-                ul
-                  li= p.itm_num
-                  li
-                    span <strong>
-                    span= p.date_string
-                    span </strong><br>
-                    span= p.text
-                  each lnk in p.links
+                  span= d.proceeding[d.proceeding.length - 1].text
+                  each lnk in d.proceeding[d.proceeding.length - 1].links
+                    br
+                    span
+                      a(href=lnk.url target="_blank")= lnk.title
+              td.td-sm.proceedings(style="display:none")
+                each p in d.proceeding
+                  ul
+                    //li= p.itm_num
                     li
-                      span
-                        a(href=lnk.url target="_blank")= lnk.title
-            td.td-sm.contacts(style="display:none")
-              each c in d.contact
-                ul
-                  li
-                    p.contactlist(style='font-weight:bold')= c.attorney_full_name
-                    if c.is_counsel_of_record
-                      p.contactlist(style="padding-left:10px") Counsel of Record
-                    if c.attorney_office != ''
-                      p.contactlist= c.attorney_office
-                    if c.attorney_street_address != ''
-                      p.contactlist= c.attorney_street_address
-                    if c.attorney_city_state_zip != ''
-                    p.contactlist= c.attorney_city_state_zip
-                    if c.attorney_email != ''
-                      p.contactlist= c.attorney_email
-                    if c.party_header != ''
-                      p.contactlist(style='font-style:italic')= c.party_header
+                      span <strong>
+                      span= p.date_string
+                      span </strong><br>
+                      span= p.text
+                    each lnk in p.links
+                      li
+                        span
+                          a(href=lnk.url target="_blank")= lnk.title
+              td.td-sm.contacts(style="display:none")
+                each c in d.contact
+                  ul
+                    li
+                      p.contactlist(style='font-weight:bold')= c.attorney_full_name
+                      if c.is_counsel_of_record
+                        p.contactlist(style="padding-left:10px") Counsel of Record
+                      if c.attorney_office != ''
+                        p.contactlist= c.attorney_office
+                      if c.attorney_street_address != ''
+                        p.contactlist= c.attorney_street_address
+                      if c.attorney_city_state_zip != ''
+                        p.contactlist= c.attorney_city_state_zip
+                      if c.attorney_email != ''
+                        p.contactlist= c.attorney_email
+                      if c.party_header != ''
+                        p.contactlist(style='font-style:italic')= c.party_header
