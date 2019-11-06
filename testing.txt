@@ -1,3 +1,39 @@
+router.post("/get_dockets", (req, res, next) => {
+  console.log("app.post running");
+  var docket_form = req.body.docket;
+  var docket_split = docket_user.split("-");
+  var docket_yr = docket_split[0];
+  var docket_nm = docket_split[1];
+  var url = `https://www.supremecourt.gov/docket/docketfiles/html/public/${docket_form}.html`;
+
+  // INITIALIZE LOCAL VARIABLES
+  var tempyr = docket_yr + "-";
+  var myUrl = "";
+  var gets = [];
+
+  // get range of docket numbers
+  var i = 0;
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 99; i++) {
+    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
+    console.log(i);
+    var dkt = tempyr + i.toString();
+    console.log(dkt);
+
+    gets.push({
+      docket: dkt,
+      url: `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
+    });
+  }
+  for (i = 0; i < gets.length; i++) {
+    // IS THIS LIKE A HANDOFF OF THREADS ???
+    axios_request(gets[i]);
+  }
+
+  res.redirect("/");
+});
+
+
+
 // router.post("/get_dockets", function(req, res) {
 //   console.log("app.post running");
 //   var docket_user = req.body.docket;

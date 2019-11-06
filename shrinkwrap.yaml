@@ -2,6 +2,7 @@ dependencies:
   async: 3.1.0
   axios: 0.19.0
   cheerio: 0.22.0
+  delay: 4.3.0
   express: 4.17.1
   html-to-text: 5.1.1
   jquery: 3.4.1
@@ -323,6 +324,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
+  /delay/4.3.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-Lwaf3zVFDMBop1yDuFZ19F9WyGcZcGacsbdlZtWjQmM50tOcMntm1njF/Nb/Vjij3KaSvCF+sEYGKrrjObu2NA==
   /depd/1.1.2:
     dev: false
     engines:
@@ -1399,6 +1406,7 @@ specifiers:
   async: ^3.1.0
   axios: ^0.19.0
   cheerio: ^0.22.0
+  delay: ^4.2.0
   express: ^4.16.4
   html-to-text: ^5.1.1
   jquery: ^3.4.1

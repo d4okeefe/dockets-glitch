@@ -9,31 +9,15 @@ const cheerio = require("cheerio");
 
 //save to redis ???
 
-// SET ROUTES
-router.get("/", (req, res) => {
-  Docket.find(
-    {
-      "proceeding.text": {
-        $nin: /((Petition (DENIED|Dismissed))|(JUD?GMENT ISSUED)|(petition for a writ of certiorari is dismissed)|(petition for a writ of mandamus is dismissed))/i
-      }
-    },
-    null,
-    { sort: { docket_year: 1, docket_number_short: 1 } },
-    function(error, rows) {
-      //console.log(rows);
-      //res.send(JSON.stringify(rows));
-      res.render("index", {
-        docket_list: rows,
-        search_type: "ACTIVE CASES"
-      });
-    }
-  );
+router.get('/', (req, res)=>{
+  res.redirect('/active_cases');
 });
+
 router.get("/active_cases", (req, res) => {
   Docket.find(
     {
       "proceeding.text": {
-        $nin: /((Petition (DENIED|Dismissed))|(JUD?GMENT ISSUED)|(petition for a writ of certiorari is dismissed)|(petition for a writ of mandamus is dismissed))/i
+        $nin: /((Petition (DENIED|Dismissed))|(JUD?GMENT ISSUED)|(petition for a writ of certiorari is dismissed)|(petition for a writ of mandamus is dismissed)|(Judgment VACATED)|(Case removed from Docket))/i
       }
     },
     null,
@@ -151,10 +135,13 @@ router.get("/dockets", (req, res) => {
   );
 });
 
+const delay = require("delay");
+
 async function axios_request(get) {
-  console.log(get.docket + ": " + get.url);
-  var temp_dkt = get.docket;
   try {
+    console.log(get.docket + ": " + get.url);
+    var temp_dkt = get.docket;
+
     const response = await axios.get(get.url);
     console.log("SUCCESS!!!   " + temp_dkt);
 
@@ -183,11 +170,9 @@ async function axios_request(get) {
        * status code that falls out of the range of 2xx
        */
       //console.log(error.response.data);
-      //console.log(error.response.status);
+      console.log("ERROR STATUS: " + error.response.status);
       //console.log(error.response.headers)
-      console.log(
-        "ERROR: " + temp_dkt + " ERROR: RESPONSE STATUS OUTSIDE OF 2XX!!!"
-      );
+      //console.log("ERROR: " + temp_dkt + " ERROR: RESPONSE STATUS OUTSIDE OF 2XX!!!");
     } else if (error.request) {
       /*
        * The request was made but no response was received, `error.request`
@@ -211,38 +196,61 @@ async function axios_request(get) {
 router.get("/get_dockets", (req, res) => {
   res.render("get_dockets");
 });
-router.post("/get_dockets", (req, res, next) => {
+
+router.post("/get_dockets", function(req, res) {
   console.log("app.post running");
-  var docket_user = req.body.docket;
-  var docket_split = docket_user.split("-");
-  var docket_yr = docket_split[0];
-  var docket_nm = docket_split[1];
-  var url = `https://www.supremecourt.gov/docket/docketfiles/html/public/${docket_user}.html`;
+  var dkt_form = req.body.docket;
+  var splt = dkt_form.split(dkt_form, "-");
+  var docket_yr = splt[0];
+  var docket_nm = splt[1];
 
   // INITIALIZE LOCAL VARIABLES
   var tempyr = docket_yr + "-";
-  var myUrl = "";
-  var gets = [];
+  var promises = [];
 
   // get range of docket numbers
   var i = 0;
-  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 99; i++) {
-    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
+  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
     console.log(i);
-    var dkt = tempyr + i.toString();
-    console.log(dkt);
+    var dkt = tempyr + i.toString(10);
+    //console.log(dkt + " " + typeof dkt);
+    //console.log(i + ":" + docket_nm);
+    promises.push(
+      axios.get(
+        `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
+      )
+    );
+  }
 
-    gets.push({
-      docket: dkt,
-      url: `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
+  axios
+    .all(promises)
+    .then(results => {
+      results.forEach(response => {
+        console.log(response.status);
+        //console.log(response); // THIS WILL PRINT THE WEBPAGE
+        var update = utilities.parseResponseData(response);
+        //console.log("UPDATE: " + update);
+        if (update !== null) {
+          var query = { case_name: update.case_name };
+          var options = {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true,
+            overwrite: true
+          };
+
+          Docket.findOneAndUpdate(query, update, options, (error, result) => {
+            if (error) console.log("ERROR: " + error);
+          });
+        }
+      });
+    })
+    .catch(error => {
+      console.log(error);
     });
-  }
-  for (i = 0; i < gets.length; i++) {
-    // IS THIS LIKE A HANDOFF OF THREADS ???
-    axios_request(gets[i]);
-  }
-  
-  res.redirect('/');
+
+  res.redirect("/");
 });
 
 module.exports = router;
