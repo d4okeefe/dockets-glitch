@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-dockets-glitch",
+      "appliesTo": "/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-dockets-glitch",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}

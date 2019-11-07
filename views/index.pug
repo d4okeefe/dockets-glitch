@@ -118,16 +118,23 @@ block content
                 each c in d.contact
                   ul
                     li
-                      p.contactlist(style='font-weight:bold')= c.attorney_full_name
+                      p.contactlist(style='font-weight:bold;')= c.attorney_full_name
                       if c.is_counsel_of_record
-                        p.contactlist(style="padding-left:10px") Counsel of Record
+                        p.contactlist(style="padding-left:10px;font-style:italic;") Counsel of Record
                       if c.attorney_office != ''
                         p.contactlist= c.attorney_office
                       if c.attorney_street_address != ''
-                        p.contactlist= c.attorney_street_address
+                        p.contactlist(style='white-space:pre;')= c.attorney_street_address
                       if c.attorney_city_state_zip != ''
                         p.contactlist= c.attorney_city_state_zip
                       if c.attorney_email != ''
                         p.contactlist= c.attorney_email
                       if c.party_header != ''
-                        p.contactlist(style='font-style:italic')= c.party_header
+                        if /Attorneys? for/.test(c.party_header)
+                          p.contactlist(style='font-style:italic')= c.party_header
+                          if c.party_name != ''
+                            p.contactlist(style="padding-left:10px;font-style:italic;")= c.party_name
+                        else
+                          if c.party_name != ''
+                            p.contactlist(style='font-style:italic') Attorneys for
+                            p.contactlist(style="padding-left:10px;font-style:italic;")= c.party_name

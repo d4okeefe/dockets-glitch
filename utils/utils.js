@@ -235,7 +235,7 @@ let getContacts = ($, docket_data) => {
         temp_contact.attorney_full_name = htt
           .fromString(temp_contact.name_block)
           .trim();
-        //console.log(temp_contact.attorney_full_name);
+        console.log(temp_contact.attorney_full_name);
       }
       // get surname
       temp_contact.attorney_surname = temp_contact.attorney_full_name
@@ -258,60 +258,45 @@ let getContacts = ($, docket_data) => {
           cnext2.push(cnext_itm_temp);
         }
       }
-      var hasCompany = true;
-      var firstElement = cnext2[0];
-      re = /[0-9]/;
-      if (!re.test(firstElement)) {
-        hasCompany = false;
-      }
-      if (hasCompany) {
-        temp_contact.attorney_office = firstElement;
-      } else {
+      // check first element of address array:
+      // if it has a number, not a company
+      var hasCompany = false;
+      if(/[0-9]/.test(cnext2[0])){
         temp_contact.attorney_office = "";
+      }else{
+        temp_contact.attorney_office = cnext2[0];
+        hasCompany = true;
       }
 
       var hasEmail = false;
-      re = /[@]/;
-      var lastElement = cnext2.slice(-1);
-      if (re.test(lastElement)) {
+      if(/[@]/.test(cnext2.slice(-1))){
+        temp_contact.attorney_email = cnext2.slice(-1);
         hasEmail = true;
-        temp_contact.attorney_email = lastElement;
-      } else {
+      }else{
         temp_contact.attorney_email = "";
       }
-      //console.log("temp_contact.attorney_email " + temp_contact.attorney_email);
 
       var city_state_zip = "";
       if (hasEmail) {
-        // console.log(cnext2[0]);
-        // console.log(cnext2[1]);
-        // console.log(cnext2[2]);
-        // console.log(cnext2[3]);
-
         city_state_zip = cnext2.slice(-2, -1);
         temp_contact.attorney_city_state_zip = String(city_state_zip);
       } else {
         city_state_zip = cnext2.slice(-1);
         temp_contact.attorney_city_state_zip = String(city_state_zip);
       }
-      // console.log(
-      //   "temp_contact.attorney_city_state_zip " +
-      //     temp_contact.attorney_city_state_zip
-      // );
-      // console.log(typeof temp_contact.attorney_city_state_zip);
 
       re = /^(([A-Z][a-z.]+\s?)+),\s([A-Z]{2})\s(\d{5}-?(\d{4})?)$/;
       if (re.test(temp_contact.attorney_city_state_zip)) {
         temp_contact.is_city_state_zip_valid = true;
         temp_contact.attorney_city = temp_contact.attorney_city_state_zip.match(
           re
-        )[0];
+        )[1];
         temp_contact.attorney_state = temp_contact.attorney_city_state_zip.match(
           re
-        )[2];
+        )[3];
         temp_contact.attorney_zip = temp_contact.attorney_city_state_zip.match(
           re
-        )[3];
+        )[4];
       } else {
         temp_contact.is_city_state_zip_valid = false;
         temp_contact.attorney_city = "";
@@ -363,8 +348,16 @@ let getContacts = ($, docket_data) => {
       contact_list.push(temp_contact);
     }
 
-    /// PARTY FOOTER !?!??!?!
-
+    /// PARTY FOOTER
+    //$(c).attr("class") === "ContactParty spacer"
+    if (/^(Party name:)(.+)/.test($(c).text())) {
+      var tempPartyName = $(c).text();
+      re =/^(Party name:)(.+)/;
+      if(re.test(tempPartyName)){
+        temp_contact.party_name = tempPartyName.match(re)[2].trim();
+        console.log(temp_contact.party_name);
+      }
+    }
     /// party_header: { type: String },
     /// party_description: { type: String },
     /// name_block: { type: String },
