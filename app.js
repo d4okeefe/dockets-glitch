@@ -22,7 +22,6 @@ var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function() {
 var listener = app.listen(process.env.PORT, function () {
     console.log("Your app is listening on port " + listener.address().port);
 });
