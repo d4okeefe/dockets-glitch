@@ -235,7 +235,7 @@ let getContacts = ($, docket_data) => {
         temp_contact.attorney_full_name = htt
           .fromString(temp_contact.name_block)
           .trim();
-        console.log(temp_contact.attorney_full_name);
+        //console.log(temp_contact.attorney_full_name);
       }
       // get surname
       temp_contact.attorney_surname = temp_contact.attorney_full_name
@@ -355,7 +355,7 @@ let getContacts = ($, docket_data) => {
       re =/^(Party name:)(.+)/;
       if(re.test(tempPartyName)){
         temp_contact.party_name = tempPartyName.match(re)[2].trim();
-        console.log(temp_contact.party_name);
+        //console.log(temp_contact.party_name);
       }
     }
     /// party_header: { type: String },
