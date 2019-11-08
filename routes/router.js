@@ -200,7 +200,7 @@ router.get("/get_dockets", (req, res) => {
 router.post("/get_dockets", function(req, res) {
   console.log("app.post running");
   var dkt_form = req.body.docket;
-  var splt = dkt_form.split(dkt_form, "-");
+  var splt = dkt_form.split("-");
   var docket_yr = splt[0];
   var docket_nm = splt[1];
 
@@ -210,12 +210,10 @@ router.post("/get_dockets", function(req, res) {
 
   // get range of docket numbers
   var i = 0;
-  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
-  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
-    console.log(i);
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
     var dkt = tempyr + i.toString(10);
-    //console.log(dkt + " " + typeof dkt);
-    //console.log(i + ":" + docket_nm);
+    console.log(dkt);
     promises.push(
       axios.get(
         `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
@@ -247,7 +245,7 @@ router.post("/get_dockets", function(req, res) {
       });
     })
     .catch(error => {
-      console.log(error);
+      console.log(dkt);
     });
 
   res.redirect("/");
