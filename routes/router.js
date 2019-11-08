@@ -208,20 +208,18 @@ router.post("/get_dockets", function (req, res) {
     var tempyr = docket_yr + "-";
     var promises = [];
 
-    // get range of docket numbers
-    var i = 0;
-    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
-    for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
-        console.log(i);
-        var dkt = tempyr + i.toString(10);
-        //console.log(dkt + " " + typeof dkt);
-        //console.log(i + ":" + docket_nm);
-        promises.push(
-            axios.get(
-                `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
-            )
-        );
-    }
+  // get range of docket numbers
+  var i = 0;
+  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+  //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
+    var dkt = tempyr + i.toString(10);
+    console.log(dkt);
+    promises.push(
+      axios.get(
+        `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
+      )
+    );
+  }
 
     axios
         .all(promises)
@@ -240,15 +238,15 @@ router.post("/get_dockets", function (req, res) {
                         overwrite: true
                     };
 
-                    Docket.findOneAndUpdate(query, update, options, (error, result) => {
-                        if (error) console.log("ERROR: " + error);
-                    });
-                }
-            });
-        })
-        .catch(error => {
-            console.log(error);
-        });
+          Docket.findOneAndUpdate(query, update, options, (error, result) => {
+            if (error) console.log("ERROR: " + error);
+          });
+        }
+      });
+    })
+    .catch(error => {
+      console.log(dkt);
+    });
 
     res.redirect("/");
 });
