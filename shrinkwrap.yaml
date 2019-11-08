@@ -1,6 +1,7 @@
 dependencies:
   async: 3.1.0
   axios: 0.19.0
+  axios-progress-bar: 1.2.0
   cheerio: 0.22.0
   delay: 4.3.0
   express: 4.17.1
@@ -96,6 +97,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4vx/aaY6j/j3Lw3fbCHNWP0pPaTCew3F6F3hYyl/tHs/ndmV1q7NW9T5yuJ2XAGwdQrP+6Wu20x06U4APo/iQQ==
+  /axios-progress-bar/1.2.0:
+    dev: false
+    peerDependencies:
+      axios: 0.x
+    resolution:
+      integrity: sha512-PEgWb/b2SMyHnKJ/cxA46OdCuNeVlo8eqL0HxXPtz+6G/Jtpyo49icPbW+jpO1wUeDEjbqpseMoCyWxESxf5pA==
   /axios/0.19.0:
     dependencies:
       follow-redirects: 1.5.10
@@ -1405,6 +1412,7 @@ shrinkwrapVersion: 3
 specifiers:
   async: ^3.1.0
   axios: ^0.19.0
+  axios-progress-bar: ^1.2.0
   cheerio: ^0.22.0
   delay: ^4.2.0
   express: ^4.16.4
