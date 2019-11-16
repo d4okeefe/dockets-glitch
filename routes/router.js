@@ -13,7 +13,9 @@ router.get("/", (req, res) => {
   res.redirect("/active_cases");
 });
 
+
 router.get("/active_cases", (req, res) => {
+
   Docket.find(
     {
       "proceeding.text": {
@@ -30,7 +32,7 @@ router.get("/active_cases", (req, res) => {
         search_type: "ACTIVE CASES"
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/amicus_curiae", (req, res) => {
@@ -48,7 +50,7 @@ router.get("/amicus_curiae", (req, res) => {
         search_type: "AMICUS CURIAE CASES (cases where >= 1 amicus has filed)"
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/year/:yr", (req, res) => {
@@ -67,7 +69,7 @@ router.get("/year/:yr", (req, res) => {
         search_type: "CASES FROM DOCKET YEAR " + yr
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/petitions_denied", (req, res) => {
@@ -85,7 +87,7 @@ router.get("/petitions_denied", (req, res) => {
         search_type: "CASES DENIED CERT"
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/petitions_granted", (req, res) => {
@@ -103,7 +105,7 @@ router.get("/petitions_granted", (req, res) => {
         search_type: "CASES GRANTED CERT"
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/all_cases", (req, res) => {
@@ -120,7 +122,7 @@ router.get("/all_cases", (req, res) => {
         search_type: "ALL CASES COLLECTED"
       });
     }
-  );
+  ).lean();
 });
 
 router.get("/dockets", (req, res) => {
@@ -132,7 +134,7 @@ router.get("/dockets", (req, res) => {
       //console.log(JSON.stringify(rows));
       res.send(JSON.stringify(rows));
     }
-  );
+  ).lean();
 });
 
 const delay = require("delay");
@@ -197,35 +199,39 @@ router.get("/get_dockets", (req, res) => {
   res.render("get_dockets");
 });
 router.post("/get_dockets", (req, res, next) => {
-  console.log("app.post running");
-  var dkt_form = req.body.docket;
-  var splt = dkt_form.split("-");
-  var docket_yr = splt[0];
-  var docket_nm = splt[1];
+  if (req.body.get_dockets == "submit_docket") {
+    console.log("app.post running");
+    var dkt_form = req.body.docket;
+    var splt = dkt_form.split("-");
+    var docket_yr = splt[0];
+    var docket_nm = splt[1];
 
-  // INITIALIZE LOCAL VARIABLES
-  // INITIALIZE LOCAL VARIABLES
-  var tempyr = docket_yr + "-";
-  var gets = [];
+    // INITIALIZE LOCAL VARIABLES
+    // INITIALIZE LOCAL VARIABLES
+    var tempyr = docket_yr + "-";
+    var gets = [];
 
-  // get range of docket numbers
-  var i = 0;
-  for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
-    //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
-    var dkt = tempyr + i.toString(10);
-    console.log(dkt);
+    // get range of docket numbers
+    var i = 0;
+    for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 49; i++) {
+      //for (i = parseInt(docket_nm, 10); i <= parseInt(docket_nm, 10) + 1; i++) {
+      var dkt = tempyr + i.toString(10);
+      console.log(dkt);
 
-    gets.push({
-      docket: dkt,
-      url: `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
-    });
+      gets.push({
+        docket: dkt,
+        url: `https://www.supremecourt.gov/docket/docketfiles/html/public/${dkt}.html`
+      });
+    }
+    for (i = 0; i < gets.length; i++) {
+      // IS THIS LIKE A HANDOFF OF THREADS ???
+      axios_request(gets[i]);
+    }
+
+    res.redirect("/");
+  }else/*if (req.body.get_dockets == "submit_docket_plus")*/{
+    res.redirect("/");
   }
-  for (i = 0; i < gets.length; i++) {
-    // IS THIS LIKE A HANDOFF OF THREADS ???
-    axios_request(gets[i]);
-  }
-
-  res.redirect("/");
 });
 
 module.exports = router;

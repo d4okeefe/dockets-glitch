@@ -3,13 +3,15 @@ extends layout
 block content
 
 block content
-  div.container
+  .container
     h1
       | Capture Dockets
-  div.container
+  .container
     form#capture_docket_form(method='post' action='/get_dockets')
       div
         label(for='docket_num') Enter docket number:
         input#docket_num(name='docket' type='text' maxlength='100' placeholder='19-100' autofocus='')
       div
-        button#submit-docket(type='submit' disabled='') Submit Docket    
+        button#submit-docket(type='submit' name="get_dockets" value="submit_docket" disabled='') Get 50 Dockets
+      //div
+        //button#submit-docket-plus(type='submit' name="get_dockets_plus" value="submit_docket_plus" disabled='') Get 100 Dockets
