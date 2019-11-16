@@ -303,24 +303,25 @@ $(document).ready(function() {
   // set variables
   const $docket_num = $("#docket_num");
   const $submit_docket = $("#submit-docket");
-  //const $docket_found = $("#docket_found");
-  //const docketRequest = new XMLHttpRequest();
-  let dockets_array = [];
-
+  const $submit_docket_plus = $("#submit-docket-plus");
+  let dockets_array = []
   // data validation
   $("#capture_docket_form").keyup(function(e) {
     if ($docket_num.val().length < 1) {
       $docket_num.removeClass("error");
       $submit_docket.prop("disabled", true);
+      $submit_docket_plus.prop("disabled", true);
     } else {
       const regEx = /^[0-9]{2}[\-AaMm][0-9]{1,4}$/;
       const validDocketNum = regEx.test($docket_num.val());
       if (!validDocketNum) {
         $("#docket_num").addClass("error");
         $submit_docket.prop("disabled", true);
+        $submit_docket_plus.prop("disabled", true);
       } else {
         $("#docket_num").removeClass("error");
         $submit_docket.prop("disabled", false);
+        $submit_docket_plus.prop("disabled", false);
       }
     }
   });
