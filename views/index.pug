@@ -54,7 +54,7 @@ block content
     table#docket-table.table-hover.table.table-bordered.table-sm(cellspacing="0" width="100%")
       thead.thead-dark
         tr
-          th.th-sm.date_retrieved_header Date retrieved from Scotus Site        
+          th.th-sm.date_retrieved_header(style="display:none") Date retrieved from Scotus Site        
           th.th-sm.dkt_yr_header(style="display:none") Docket year
           th.th-sm.dkt_shrt_header(style="display:none") Short docket number
           
@@ -64,14 +64,14 @@ block content
           th.th-sm.lower_court_header(style="display:none") Lower Court
           th.th-sm.lower_court_case_number_header(style="display:none")= 'Lower court case number'
           th.th-sm.lower_court_decision_dates_header(style="display:none") Lower Ct Decision
-          th.th-sm.latest_proceeding_header(style="display:none") Latest proceeding
+          th.th-sm.latest_proceeding_header Latest proceeding
           th.th-sm.proceedings_header(style="display:none") Proceedings
           th.th-sm.contacts_header(style="display:none") Contacts
       tbody
         if docket_list != null
           each d in docket_list
             tr#docket-rows
-              td.td-sm.date_retrieved= prettyDate(d.date_retrieved)            
+              td.td-sm.date_retrieved(style="display:none")= prettyDate(d.date_retrieved)            
               td.td-sm.dkt_yr(style="display:none")= d.docket_year
               td.td-sm.dkt_shrt(style="display:none")= d.docket_number_short
               td.td-sm.docket_number
@@ -93,7 +93,7 @@ block content
                 if d.lower_court_discretionary_court_decision__date_string != ""
                   p(style="font-style:italic") Discretionary date:
                   p= d.lower_court_discretionary_court_decision__date_string
-              td.td-sm.latest_proceeding(style="display:none")
+              td.td-sm.latest_proceeding
                 div
                   span= d.proceeding[d.proceeding.length - 1].date_string
                   br
