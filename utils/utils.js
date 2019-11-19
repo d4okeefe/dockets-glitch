@@ -14,13 +14,20 @@ exports.parseResponseData = response => {
   docket_data.web_address = response.config.url;
   //console.log("docket_data.web_address: " + docket_data.web_address);
   docket_data.docket_number = docket_data.web_address.match(
-    /https:\/\/www\.supremecourt\.gov\/docket\/docketfiles\/html\/public\/(\d{2}\-\d{1,4}).html/
+    /https:\/\/www\.supremecourt\.gov\/docket\/docketfiles\/html\/public\/(\d{2}[MmOoAa-]\d{1,4}).html/
   )[1];
   // make sure values exist
   if (docket_data.web_address === "" || docket_data.docket_number === "") {
     return null;
   }
+  
+  
+  
+  
   docket_data.docket_year = docket_data.docket_number.split("-")[0];
+  if (docket_data.docket_year.count() == 1){
+    
+  }
   docket_data.docket_number_short = docket_data.docket_number.split("-")[1];
 
   var $docketInfoTitles = $(".DocketInfoTitle");

@@ -1,3 +1,10 @@
+include/exclude
+IFP Cases
+Applications
+Motions
+Original Actions
+
+
 router.post("/get_dockets", function(req, res) {
   console.log("app.post running");
   var dkt_form = req.body.docket;

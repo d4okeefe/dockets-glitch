@@ -5,12 +5,8 @@ block content
     h2
       | Supreme Court Dockets
     div 
-      div 
-        h6
-          | Find dockets:
-        input#search-table(type="text" placeholder="Search...")
-        br
-        br
+      div
+        h4 Get dockets from server
       div
         nav.navbar.navbar-expand-lg.navbar-light.bg-light
           form#petiton-granted(method="get" action="/active_cases")
@@ -29,12 +25,20 @@ block content
             input(type="submit" value="Docket year 18")
           form#year_collection(method="get" action="/year/19")
             input(type="submit" value="Docket year 19")
+          form#oa_collection(method="get" action="/original_actions")
+            input(type="submit" value="Original Actions")            
         br
         br
       div
         h4= search_type
       div
         h6#num_rows_in_tbl
+      div 
+        h6
+          | Find within results:
+        input#search-table(type="text" placeholder="Search...")
+        br
+        br        
       div
         h6
           | add / remove columns
@@ -50,6 +54,18 @@ block content
           a#toggle_contacts Contacts
         br
       div
+        h6
+          | hide / show 
+        nav.navbar.navbar-expand-lg.navbar-light.bg-light
+          div.form-check
+            input#toggleIFPCases.form-check-input(type="checkbox")
+            label.form-check-label(for="toggleIFPCases") Show / Hide IFP Cases
+          div.form-check            
+            input#toggleApplications.form-check-input(type="checkbox")
+            label.form-check-label(for="toggleApplications") Show / Hide Applications
+          div.form-check            
+            input#toggleMotions.form-check-input(type="checkbox")
+            label.form-check-label(for="toggleMotions") Show / Hide Motions
   div.container
     table#docket-table.table-hover.table.table-bordered.table-sm(cellspacing="0" width="100%")
       thead.thead-dark
