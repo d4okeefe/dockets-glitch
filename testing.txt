@@ -1,3 +1,26 @@
+//     createdRow: function(row, data, dataIndex) {
+//       //console.log($(data[3]).text());
+//       if ($(data[3]).text().match(/\d{2}[Aa]\d+/)) {
+//         $(row).addClass("application-docket");
+//       }
+//       if ($(data[3]).text().match(/\d{2}[Mm]\d+/)) {
+//         $(row).addClass("motion-docket");
+//       }
+//       if ($(data[3]).text().match(/\d{2}[Oo]\d+/)) {
+//         $(row).addClass("original-action-docket");
+//       }
+      
+//       if ($(data[3]).text().match(/\d{2}[Oo](\d{4})/)) {
+//         $(row).addClass("ifp-docket");
+//       }      
+//       $("#toggleApplications").prop("checked", false);  
+//       $(".application-docket").api().remove();
+//       $("#toggleIFPCases").prop("checked", false);
+//       $("#ifp-docket").api().remove();
+//       $("#toggleMotions").prop("checked", false);
+//       $(".motion-docket").api().remove();
+//     }
+
 include/exclude
 IFP Cases
 Applications
