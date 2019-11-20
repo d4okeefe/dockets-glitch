@@ -14,14 +14,18 @@ exports.parseResponseData = response => {
   docket_data.web_address = response.config.url;
   //console.log("docket_data.web_address: " + docket_data.web_address);
   docket_data.docket_number = docket_data.web_address.match(
-    /https:\/\/www\.supremecourt\.gov\/docket\/docketfiles\/html\/public\/(\d{2}\-\d{1,4}).html/
+    /https:\/\/www\.supremecourt\.gov\/docket\/docketfiles\/html\/public\/(\d{2}[MmOoAa-]\d{1,4}).html/
   )[1];
   // make sure values exist
   if (docket_data.web_address === "" || docket_data.docket_number === "") {
     return null;
   }
-  docket_data.docket_year = docket_data.docket_number.split("-")[0];
-  docket_data.docket_number_short = docket_data.docket_number.split("-")[1];
+
+  var re = /(\d{2})([-AaMmOo])(\d+)/;
+  var matches = docket_data.docket_number.match(re);
+  docket_data.docket_year = matches[1];
+  var docket_separator = matches[2];
+  docket_data.docket_number_short = matches[3];
 
   var $docketInfoTitles = $(".DocketInfoTitle");
   docket_data.docket_info_title = [];
@@ -52,9 +56,7 @@ exports.parseResponseData = response => {
       ? null
       : new Date(docket_data.date_docketed_string);
   //docket_data.lower_court = $("td:contains(Lower Ct:)")
-  docket_data.lower_court = $(
-    "#docketinfo tr:nth-child(5) td:nth-child(2)"
-  )
+  docket_data.lower_court = $("#docketinfo tr:nth-child(5) td:nth-child(2)")
     .text()
     .trim();
   //docket_data.lower_court_case_number = $("td:contains(Case Numbers:)")
@@ -86,9 +88,9 @@ exports.parseResponseData = response => {
       ? null
       : new Date(docket_data.lower_court_case_rehearing_denied_date_string);
   //docket_data.lower_court_discretionary_court_decision__date_string = $("td:contains(Discretionary Court Decision Date:)")
-   docket_data.lower_court_discretionary_court_decision__date_string = $("#docketinfo > tbody > tr:nth-child(9) > td:nth-child(2)")
-  
-
+  docket_data.lower_court_discretionary_court_decision__date_string = $(
+    "#docketinfo > tbody > tr:nth-child(9) > td:nth-child(2)"
+  )
     .text()
     .trim();
   docket_data.lower_court_discretionary_court_decision__date =
@@ -261,18 +263,18 @@ let getContacts = ($, docket_data) => {
       // check first element of address array:
       // if it has a number, not a company
       var hasCompany = false;
-      if(/[0-9]/.test(cnext2[0])){
+      if (/[0-9]/.test(cnext2[0])) {
         temp_contact.attorney_office = "";
-      }else{
+      } else {
         temp_contact.attorney_office = cnext2[0];
         hasCompany = true;
       }
 
       var hasEmail = false;
-      if(/[@]/.test(cnext2.slice(-1))){
+      if (/[@]/.test(cnext2.slice(-1))) {
         temp_contact.attorney_email = cnext2.slice(-1);
         hasEmail = true;
-      }else{
+      } else {
         temp_contact.attorney_email = "";
       }
 
@@ -352,8 +354,8 @@ let getContacts = ($, docket_data) => {
     //$(c).attr("class") === "ContactParty spacer"
     if (/^(Party name:)(.+)/.test($(c).text())) {
       var tempPartyName = $(c).text();
-      re =/^(Party name:)(.+)/;
-      if(re.test(tempPartyName)){
+      re = /^(Party name:)(.+)/;
+      if (re.test(tempPartyName)) {
         temp_contact.party_name = tempPartyName.match(re)[2].trim();
         //console.log(temp_contact.party_name);
       }

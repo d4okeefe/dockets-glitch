@@ -10,12 +10,29 @@ const cheerio = require("cheerio");
 //save to redis ???
 
 router.get("/", (req, res) => {
-  res.redirect("/active_cases");
+  //res.redirect("/active_cases");
+  res.redirect("/testing");
 });
 
+router.get("/testing", (req, res) => {
+  Docket.find(
+    {
+      docket_year: 19,
+      docket_number_short: { $lte: 20 },
+      docket_number:{ $regex: /\d+-\d+/i}
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      res.render("index", {
+        docket_list: rows,
+        search_type: "TESTING"
+      });
+    }
+  ).lean();
+});
 
 router.get("/active_cases", (req, res) => {
-
   Docket.find(
     {
       "proceeding.text": {
@@ -136,8 +153,23 @@ router.get("/dockets", (req, res) => {
     }
   ).lean();
 });
-
-const delay = require("delay");
+router.get("/original_actions", (req, res) => {
+  Docket.find(
+    {
+      "docket_number": {
+        $regex: /\d{2}[Oo]\d+/i
+      }
+    },
+    null,
+    { sort: { docket_year: 1, docket_number_short: 1 } },
+    function(error, rows) {
+      res.render("index", {
+        docket_list: rows,
+        search_type: "ORIGINAL ACTIONS"
+      });
+    }
+  ).lean();
+});
 
 async function axios_request(get) {
   try {
@@ -202,13 +234,17 @@ router.post("/get_dockets", (req, res, next) => {
   if (req.body.get_dockets == "submit_docket") {
     console.log("app.post running");
     var dkt_form = req.body.docket;
-    var splt = dkt_form.split("-");
-    var docket_yr = splt[0];
-    var docket_nm = splt[1];
+    var re = /(\d{2})([-AaMmOo])(\d+)/;
+    var matches = dkt_form.match(re);
+    var docket_yr = matches[1];
+    var docket_separator = matches[2];
+    var docket_nm = matches[3];
+    //var splt = dkt_form.split("-");
+    //var docket_yr = splt[0];
+    //var docket_nm = splt[1];
 
     // INITIALIZE LOCAL VARIABLES
-    // INITIALIZE LOCAL VARIABLES
-    var tempyr = docket_yr + "-";
+    var tempyr = docket_yr + docket_separator;
     var gets = [];
 
     // get range of docket numbers
@@ -229,7 +265,7 @@ router.post("/get_dockets", (req, res, next) => {
     }
 
     res.redirect("/");
-  }else/*if (req.body.get_dockets == "submit_docket_plus")*/{
+  } /*if (req.body.get_dockets == "submit_docket_plus")*/ else {
     res.redirect("/");
   }
 });
